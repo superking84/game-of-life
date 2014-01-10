@@ -117,7 +117,6 @@ def tick(grid):
             y, x = cell.row, cell.col
             if cell.live:
                 if count not in [2, 3]:
-                    # cell dies if it does not have 2 or 3 neighbors
                     new_data += 'D'
                 else:
                     new_data += 'L'
