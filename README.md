@@ -5,7 +5,7 @@ Simple Python implementation of Conway's Game of Life
 
 http://en.wikipedia.org/wiki/The_Game_Of_Life
 
-As the title explains, I took upon the challenge of creating a working versino of Conway's Game of Life.  I still
+As the title explains, I took upon the challenge of creating a working version of Conway's Game of Life.  I still
 have a lot of work to do, but it's the first thing I thought was actually interesting enough to share on Github.
 I may expand the README as I continue work on it, but for now I don't think there's much to say.
 
