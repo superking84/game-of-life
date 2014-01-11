@@ -1,86 +1,28 @@
 import time
-import random
-
-class Cell(object):
-    def __init__(self, grid, row, col, live):
-        self.live = live
-        self.grid = grid
-        self.row = row
-        self.col = col
-        self.neighbors = []
-    
-    def __repr__(self):
-        #return "%s Cell at (%d,%d)" % ("Live" if self.live else "Dead", self.row, self.col)
-        return 'X' if self.live else ' '
-        
-    def __eq__(self, cell2):
-        return self.live == cell2.live
-        
-    def __ne__(self, cell2):
-        return self.live != cell2.live
-        
-    def get_neighbors(self, grid):
-        '''
-        Identifies all the neighboring cells for a particular
-        cell on the provided grid.
-        The current code allows the grid to wrap around itself, so the
-        left-most cell in a row is the right-hand neighbor of the
-        right-most cell in that row, for example.
-        If I didn't want to allow that, I could disallow appending
-        with negative indexes.
-        '''
-        neighbor_indexes = [[-1,-1],[-1,0],[-1,1],
-                            [0,-1],[0,1],
-                            [1,-1],[1,0],[1,1]
-                           ]
-        cells = grid.cells
-        for coord in neighbor_indexes:
-            y1, x1 = self.row, self.col
-            y2, x2 = coord
-            try:
-                self.neighbors.append(cells[y1+y2][x1+x2])
-            except IndexError:
-                pass  
-                
-    def count_neighbors(self):
-        '''
-        Returns the number of live neighbors the cell has.
-        '''
-        err_msg = "This function can only be run on fully-formed Cells."
-        assert (self.grid and self.neighbors), err_msg
-        count = 0
-        
-        for neighbor in self.neighbors:
-            if neighbor.live:
-                count += 1
-                
-        return count
-        
 
 class Grid(object):
     def __init__(self, data):
         data = [[b for b in a] for a in data.strip().split(',')]
         self.cells = []
-        
+        self.neighbor_coordinates = [(-1,-1),(-1,0),(-1,1),
+                                     ( 0,-1),       ( 0,1),
+                                     ( 1,-1),( 1,0),( 1,1)]
+                                     
         for i in range(len(data)):
             self.cells.append([])
             for j in range(len(data[i])):
-                cell = Cell(self, i, j, False)
-                if data[i][j] == 'L':
-                    cell.live = True
-                self.cells[i].append(cell)
-        
-        for row in self.cells:
-            for cell in row:
-                cell.get_neighbors(self)
+                if data[i][j] == '1':
+                    self.cells[i].append(1)
+                elif data[i][j] == '0':
+                    self.cells[i].append(0)
+                else:
+                    raise ValueError
         
     def __repr__(self):
-        return '\n'.join([str(row) for row in self.cells]) + '\n'
+        return ('\n'.join([str(row) for row in self.cells]) \
+                + '\n').replace('1', 'X').replace('0', ' ')
             
     __str__ = __repr__
-    
-    def __getitem__(self, key):
-        return self.cells[key]
         
     def __eq__(self, grid2):
         cells = self.cells
@@ -98,10 +40,26 @@ class Grid(object):
         
     def is_empty(self):
         for row in self.cells:
-            if any([cell.live for cell in row]):
+            if any([cell for cell in row]):
                 return False
         
         return True
+        
+    def count_live_neighbors(self, row, column):
+        count = 0
+        
+        for i in range(len(self.neighbor_coordinates)):
+            newRow = row + self.neighbor_coordinates[i][0]
+            newColumn = column + self.neighbor_coordinates[i][1]
+            if newRow == len(self.cells):
+                newRow = 0
+            if newColumn == len(self.cells[i]):
+                newColumn = 0
+                
+            if (self.cells[newRow][newColumn]):
+                count += 1
+                
+        return count
     
 def build_grid_from_src(src):
     src = open(src, 'r')
@@ -113,18 +71,17 @@ def tick(grid):
     for i in range(len(grid.cells)):
         for j in range(len(grid.cells[i])):
             cell = grid.cells[i][j]
-            count = cell.count_neighbors()
-            y, x = cell.row, cell.col
-            if cell.live:
+            count = grid.count_live_neighbors(i, j)
+            if cell:
                 if count not in [2, 3]:
-                    new_data += 'D'
+                    new_data += '0'
                 else:
-                    new_data += 'L'
+                    new_data += '1'
             else:
                 if count == 3:
-                    new_data += 'L'
+                    new_data += '1'
                 else:
-                    new_data += 'D'
+                    new_data += '0'
         if (i + 1) < len(grid.cells):
             new_data += ','
         
@@ -139,10 +96,9 @@ def Run():
         if grid2 and grid2 == grid:
             break
         if grid.is_empty(): break
-        if grid2:
-            grid = grid2
-        grid2 = tick(grid)
-        time.sleep(.1)
+        grid2 = grid
+        grid = tick(grid)
+        time.sleep(.2)
 
 if __name__ == '__main__':
     Run()
