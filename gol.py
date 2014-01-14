@@ -1,8 +1,19 @@
+import sys
 import time
 
 class Grid(object):
-    def __init__(self, data):
-        data = [[b for b in a] for a in data.strip().split(',')]
+    def __init__(self, src):
+        # src may be a text file containing grid data,
+        # or it may be the grid data itself
+        try:
+            src = open(src, 'r').readline()
+        except:
+            # we have the data already and don't need to do any
+            # file manipulation
+            pass
+        finally:
+            data = [[b for b in a] for a in src.strip().split(',')]
+            
         self.cells = []
         self.neighbor_coordinates = [(-1,-1),(-1,0),(-1,1),
                                      ( 0,-1),       ( 0,1),
@@ -16,6 +27,7 @@ class Grid(object):
                 elif data[i][j] == '0':
                     self.cells[i].append(0)
                 else:
+                    # invalid data is present in the data file
                     raise ValueError
         
     def __repr__(self):
@@ -61,11 +73,6 @@ class Grid(object):
                 
         return count
     
-def build_grid_from_src(src):
-    src = open(src, 'r')
-    src = src.readline()
-    return Grid(src)
-    
 def tick(grid):
     new_data = ''
     for i in range(len(grid.cells)):
@@ -89,11 +96,15 @@ def tick(grid):
     
     
 def Run():
-    grid = build_grid_from_src('grid1.txt')
+    try:
+        grid = Grid('grid1.txt')
+    except ValueError:
+        print "\nProgram could not run!\nERROR: Invalid data present in grid file.\n"
+        sys.exit()
     grid2 = None
     while True:
         print grid
-        if grid2 and grid2 == grid:
+        if grid2 and (grid2 == grid):
             break
         if grid.is_empty(): break
         grid2 = grid
