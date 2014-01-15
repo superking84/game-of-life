@@ -95,21 +95,36 @@ def tick(grid):
     return Grid(new_data)
     
     
-def Run():
+def Run(src_file, delay):
     try:
-        grid = Grid('grid1.txt')
+        grid = Grid(src_file)
     except ValueError:
         print "\nProgram could not run!\nERROR: Invalid data present in grid file.\n"
         sys.exit()
     grid2 = None
+    print grid
+    raw_input("Press ENTER to begin.")
     while True:
-        print grid
         if grid2 and (grid2 == grid):
             break
-        if grid.is_empty(): break
+        if grid.is_empty():
+            break
         grid2 = grid
         grid = tick(grid)
-        time.sleep(.2)
+        time.sleep(delay)
+        print grid
 
 if __name__ == '__main__':
-    Run()
+    args = sys.argv[1:] # strips out filename
+    if not args:
+        Run('grid1.txt', .2)
+    else:
+        src_file = args[0]
+        try:
+            delay = float(args[1])
+        except ValueError:
+            print "Invalid time delay given, reverting to default.  Press ENTER to continue..."
+            raw_input()
+            delay = .2
+            
+        Run(src_file, delay)
