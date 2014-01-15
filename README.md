@@ -21,8 +21,9 @@ cell directly adjacent to a given cell, whether horizontally, vertically, or dia
 
 A few basic points:
   1. To run: Simply enter 'python gol.py' from the CLI with grid1.txt in the same directory.  This is a demo
-     of the game with a preset grid, set to a 1/10 second delay.  Obviously I'll adjust this so that other
-     grids can be used as well.
+     of the game with a preset grid, set to a 1/10 second delay.
+     You can also run the game with a different grid file and time delay if desired, like this: 
+        'python gol.py <filename(no quotes or braces)> <timedelay in secs>'
   2. The game (and the program) automatically ends when the board becomes empty.  However, it doesn't end
      when the game reaches stasis (live cells are on the board, but are permanently live due to their arrangement)
      and I am planning on addressing that.
