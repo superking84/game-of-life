@@ -6,13 +6,13 @@ class Grid(object):
         # src may be a text file containing grid data,
         # or it may be the grid data itself
         try:
-            src = open(src, 'r').readline()
+            src = open(src, 'r').read()
         except:
             # we have the data already and don't need to do any
             # file manipulation
             pass
         finally:
-            data = [[b for b in a] for a in src.strip().split(',')]
+            data = [[b for b in a] for a in src.strip().split(',\n')]
             
         self.cells = []
         self.neighbor_coordinates = [(-1,-1),(-1,0),(-1,1),
@@ -90,7 +90,7 @@ def tick(grid):
                 else:
                     new_data += '0'
         if (i + 1) < len(grid.cells):
-            new_data += ','
+            new_data += ',\n'
         
     return Grid(new_data)
     
