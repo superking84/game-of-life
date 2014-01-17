@@ -24,10 +24,6 @@ A few basic points:
      of the game with a preset grid, set to a 1/10 second delay.
      You can also run the game with a different grid file and time delay if desired, like this: 
         'python gol.py \<filename(no quotes or braces)\> \<timedelay in secs\>'
-  2. The game (and the program) automatically ends when the board becomes empty, or when the game reaches statis
-     (the grid no longer changes on each tick).  A pendular grid* does not yet cause the game to stop, which I will         address soon.
-     
-     *What is a pendular grid?
-      A pendular grid is one in which, given a grid at any tick n, the grid's state at n and n+2 are identical, 
-      as well as at n+1 and n+3.  Essentially, the grid is going back and forth between the same two states
-      perpetually without some kind of outside input.
+  2. The game (and the program) automatically ends when the board becomes empty, or when the only cells on
+     the grid form still-lifes (see Wikipedia article for definition).  The game should also stop when all
+     the cells on the grid form oscillators (or oscillators and still-lifes), that will be implemented soon.
