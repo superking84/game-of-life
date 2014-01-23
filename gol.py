@@ -12,7 +12,7 @@ class Grid(object):
             # file manipulation
             pass
         finally:
-            data = [[b for b in a] for a in src.strip().split(',\n')]
+            data = [[b for b in a] for a in src.strip().split('\n')]
             
         self.cells = []
         self.neighbor_coordinates = [(-1,-1),(-1,0),(-1,1),
@@ -90,7 +90,7 @@ def tick(grid):
                 else:
                     new_data += '0'
         if (i + 1) < len(grid.cells):
-            new_data += ',\n'
+            new_data += '\n'
         
     return Grid(new_data)
     
