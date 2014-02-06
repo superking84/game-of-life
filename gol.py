@@ -3,10 +3,6 @@ import time
 
 class Grid(object):
     def __init__(self, src):
-        # if src is a filename, open and read its contents first
-        if src.endswith('.txt'):
-            src = open(src, 'r').read()
-            
         data = [[b for b in a] for a in src.strip().split('\n')]
             
         self.cells = []
@@ -23,6 +19,7 @@ class Grid(object):
                     self.cells[i].append(0)
                 else:
                     raise ValueError("Invalid data is present in data file")
+                    
     def __repr__(self):
         return ('\n'.join([str(row) for row in self.cells]) \
                 + '\n').replace('1', 'X').replace('0', ' ')
@@ -65,6 +62,9 @@ class Grid(object):
                 count += 1
                 
         return count
+
+def parse_grid_file(file_name):
+    return open(file_name, 'r').read()
     
 def tick(grid):
     new_data = ''
@@ -90,7 +90,8 @@ def tick(grid):
     
 def Run(src_file, delay):
     try:
-        grid = Grid(src_file)
+        raw_data = parse_grid_file(src_file)
+        grid = Grid(raw_data)
     except ValueError:
         print "\nProgram could not run!\nERROR: Invalid data present in grid file.\n"
         sys.exit()
