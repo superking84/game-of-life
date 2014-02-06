@@ -3,16 +3,11 @@ import time
 
 class Grid(object):
     def __init__(self, src):
-        # src may be a text file containing grid data,
-        # or it may be the grid data itself
-        try:
+        # if src is a file, read its contents first
+        if type(src) == file:
             src = open(src, 'r').read()
-        except:
-            # we have the data already and don't need to do any
-            # file manipulation
-            pass
-        finally:
-            data = [[b for b in a] for a in src.strip().split('\n')]
+            
+	data = [[b for b in a] for a in src.strip().split('\n')]
             
         self.cells = []
         self.neighbor_coordinates = [(-1,-1),(-1,0),(-1,1),
@@ -27,9 +22,7 @@ class Grid(object):
                 elif data[i][j] == '0':
                     self.cells[i].append(0)
                 else:
-                    # invalid data is present in the data file
-                    raise ValueError
-        
+                    raise ValueError("Invalid data is present in data file")
     def __repr__(self):
         return ('\n'.join([str(row) for row in self.cells]) \
                 + '\n').replace('1', 'X').replace('0', ' ')
