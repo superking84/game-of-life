@@ -3,11 +3,11 @@ import time
 
 class Grid(object):
     def __init__(self, src):
-        # if src is a file, read its contents first
-        if type(src) == file:
+        # if src is a filename, open and read its contents first
+        if src.endswith('.txt'):
             src = open(src, 'r').read()
             
-	data = [[b for b in a] for a in src.strip().split('\n')]
+        data = [[b for b in a] for a in src.strip().split('\n')]
             
         self.cells = []
         self.neighbor_coordinates = [(-1,-1),(-1,0),(-1,1),
