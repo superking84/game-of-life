@@ -73,10 +73,10 @@ def tick(grid):
             cell = grid.cells[i][j]
             count = grid.count_live_neighbors(i, j)
             if cell:
-                if count not in [2, 3]:
-                    new_data += '0'
-                else:
+                if count in [2, 3]:
                     new_data += '1'
+                else:
+                    new_data += '0'
             else:
                 if count == 3:
                     new_data += '1'
@@ -99,13 +99,13 @@ def Run(src_file, delay):
     print grid
     raw_input("Press ENTER to begin.")
     while True:
-        if grid2 and (grid2 == grid):
+        if grid.is_empty() or (grid2 and (grid2 == grid)):
             break
-        if grid.is_empty():
-            break
+        
         grid2 = grid
         grid = tick(grid)
         time.sleep(delay)
+        
         print grid
 
 if __name__ == '__main__':
@@ -119,6 +119,6 @@ if __name__ == '__main__':
         except ValueError:
             print "Invalid time delay given, reverting to default.  Press ENTER to continue..."
             raw_input()
-            delay = .2
+            delay = 0.2
             
         Run(src_file, delay)
